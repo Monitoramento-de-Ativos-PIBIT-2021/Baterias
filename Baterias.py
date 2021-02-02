@@ -13,8 +13,19 @@ app = dash.Dash(__name__)
 app.layout = html.Div([
     html.H1("Monitoramento de Baterias! ", style={'text-align': 'center'}),
     dcc.Graph(id="graph"),
-    html.Button("Poderia fazer algo, mas não, só enfeite mesmo.", id='btn', n_clicks=0)
+    # html.Button("Poderia fazer algo, mas não, só enfeite mesmo.", id='btn', n_clicks=0)
+    dcc.Dropdown(id="slct_qualquercoisa",
+                 options=[
+                     {"label": "A"},
+                     {"label": "B"},
+                     {"label": "C"}],
+                 multi=False,
+                 # value=2015,
+                 style={'width': "40%"}
+                 ),
 
+    html.Div(id='output_container', children=[]),
+    html.Br(),
 ])
 
 df = pd.read_csv('https://raw.githubusercontent.com/Monitoramento-de-Ativos-PIBIT-2021/Baterias/main/csv_baterias_oneline.csv')
@@ -22,7 +33,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/Monitoramento-de-Ativos-PIBI
 
 @app.callback(
     Output("graph", "figure"),
-    [Input("btn", "n_clicks")])
+    [Input(component_id='slct_qualquercoisa', component_property='output_container')])
 
 def baterry(none):
     fig = make_subplots(rows=2,
@@ -51,7 +62,12 @@ def baterry(none):
     fig.add_trace(
         go.Scatter(x=[4000, 5000, 6000], y=[7000, 8000, 9000]),
         row=1, col=2)
-    fig.update_layout(height=700)
+
+    fig.update_layout(
+        # width=1200,
+        height=700,
+        paper_bgcolor="LightSteelBlue",
+    )
 
     return fig
 
