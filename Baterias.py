@@ -16,12 +16,13 @@ app.layout = html.Div([
     # html.Button("Poderia fazer algo, mas não, só enfeite mesmo.", id='btn', n_clicks=0)
     dcc.Dropdown(id="slct_qualquercoisa",
                  options=[
-                     {"label": "A"},
-                     {"label": "B"},
-                     {"label": "C"}],
+                     {"label": "A", "value": 'v_faseA'},
+                     {"label": "B", "value": 'v_faseB'},
+                     {"label": "C", "value": 'v_faseC'}],
                  multi=False,
+                 placeholder="Futuramente vai fazer algo.",
                  # value=2015,
-                 style={'width': "40%"}
+                 style={'width': "40%", 'text-align': 'start'}
                  ),
 
     html.Div(id='output_container', children=[]),
@@ -33,7 +34,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/Monitoramento-de-Ativos-PIBI
 
 @app.callback(
     Output("graph", "figure"),
-    [Input(component_id='slct_qualquercoisa', component_property='output_container')])
+    [Input(component_id='slct_qualquercoisa', component_property='value')])
 
 def baterry(none):
     fig = make_subplots(rows=2,
@@ -41,7 +42,7 @@ def baterry(none):
                         start_cell="bottom-left",
                         vertical_spacing=0.25,
                         horizontal_spacing=0.05,
-                        subplot_titles=('Temperatura', 'Vai ser carga e desc', 'Tensão', 'Corrente'),
+                        subplot_titles=('Temperatura', 'Carga e Descarga', 'Tensão', 'Corrente'),
     )
 
     # tensao
@@ -60,11 +61,12 @@ def baterry(none):
         row=1, col=1)
 
     fig.add_trace(
-        go.Scatter(x=[4000, 5000, 6000], y=[7000, 8000, 9000]),
+        go.Scatter(x=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ], y=[13, 12.8, 12.5,12, 11.7, 11.1,11, 11.5, 11.9,12, 12.2, 12.3],name="CARGA E DESCARGA"),
+
         row=1, col=2)
 
     fig.update_layout(
-        # width=1200,
+        width=1100,
         height=700,
         paper_bgcolor="LightSteelBlue",
     )
